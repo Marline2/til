@@ -1,0 +1,22 @@
+{
+  "til_list": [
+    {
+      "id": 0,
+      "work": "React",
+      "study_time": "4:00",
+      "description": "알고리즘 공부"
+    },
+    {
+      "id": 1,
+      "work": "TypeScript",
+      "study_time": "1:00",
+      "description": "개념 공부"
+    },
+    {
+      "work": "Axios",
+      "description": "Axios를 이용한 상태 관리",
+      "study_time": "2:00",
+      "id": 2
+    }
+  ]
+}

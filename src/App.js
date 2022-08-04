@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import styled from "styled-components";
+
+import { Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import AddTil from './AddTil';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <All>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/add" element={<AddTil />} />
+        </Routes>
+      </All>
     </div>
   );
 }
+
+const All = styled.div`
+  width: 500px;
+  height: 500px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+`;
+
 
 export default App;
