@@ -20,7 +20,9 @@ const Home = () => {
     console.log(response.data);
     const til = response.data;
     dispatch(setTil(til))
+    
   };
+
   React.useEffect(()=>{
     getTilList();
   },[]);

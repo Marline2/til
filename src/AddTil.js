@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddTil = () => {
@@ -11,36 +11,52 @@ const AddTil = () => {
 
   const navigate = useNavigate();
 
-  const addTilForm = async () => {
-    if (work_ref.current.value === "") {
-      alert("과목을 작성해주세요!");
-    } else if (study_time_ref.current.value === "") {
-      alert("시간을 작성해주세요!");
-    } else if (description_ref.current.value === "") {
-      alert("내용을 작성해주세요!");
-    } else {
-      const til_data = {
-        work: work_ref.current.value,
-        description: description_ref.current.value,
-        study_time: study_time_ref.current.value,
-      };
+  const addTilForm = () => {
+    const til_data = {
+      work: work_ref.current.value,
+      study_time: study_time_ref.current.value,
+      description: description_ref.current.value,
+    };
 
+    const empty_input = 
+    Object.values(til_data).findIndex((v) => v === "");
 
-      const postList = await axios.post("http://localhost:5001/til_list", til_data);
-      console.log(postList);
-
-      alert("추가 완료");
-
-      work_ref.current.value = "";
-      description_ref.current.value = "";
-      study_time_ref.current.value = "";
-
-      navigate(-1);
+    try {
+      if (empty_input !== -1) {
+        throw new Error("Empty input");
+      } else{
+        noEmpty(til_data);
+      }
+    } catch (err) {
+      console.log(err);
+      if (empty_input === 0) {
+        alert("과목명을 적어주세요!");
+      } else if (empty_input === 1) {
+        alert("총 시간을 적어주세요!");
+      } else {
+        alert("내용을 적어주세요!");
+      }
     }
-  };
+  }
+
+  const noEmpty = async (til_data) => {
+    console.log(til_data);
+    const postList = await axios.post(
+      "http://localhost:5001/til_list",
+      til_data
+    );
+    console.log(postList);
+
+    alert("추가 완료");
+
+    work_ref.current.value = "";
+    description_ref.current.value = "";
+    study_time_ref.current.value = "";
+
+    navigate(-1);
+  }
 
   return (
-
     <AddTilForm>
       <Title>🍒 당신의 TIL을 간략히 작성해요</Title>
       <Form>
@@ -50,9 +66,8 @@ const AddTil = () => {
       </Form>
       <Btn onClick={addTilForm}>추가하기 🍓</Btn>
     </AddTilForm>
-
   );
-}
+};
 
 const AddTilForm = styled.div`
   display: flex;
@@ -65,12 +80,12 @@ const AddTilForm = styled.div`
 const Title = styled.h3`
   text-align: center;
   height: 30px;
-`
+`;
 
 const Form = styled.div`
   height: 200px;
   width: 280px;
-`
+`;
 
 const InputBox = styled.input`
   border-radius: 20px;
@@ -79,7 +94,6 @@ const InputBox = styled.input`
   width: 250px;
   height: 20px;
   margin-bottom: 2px;
-
 `;
 
 const InputBoxBig = styled.textarea`
@@ -99,10 +113,9 @@ const Btn = styled.button`
   border-radius: 20px;
   font-size: 15px;
   font-weight: bold;
-  &:hover{  
-    background-color : pink;
+  &:hover {
+    background-color: pink;
   }
 `;
-
 
 export default AddTil;
