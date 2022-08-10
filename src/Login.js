@@ -2,21 +2,62 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+import { auth } from "./shared/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { db } from "./shared/firebase";
+
+import { getDocs, where, query, collection } from "firebase/firestore";
+
+
 const Login = () => {
   const id_ref = React.useRef(null);
   const pw_ref = React.useRef(null);
 
   const navigate = useNavigate();
 
+  const loginFB = async () => {
+    function newText(){
+      id_ref.current.value="";
+      pw_ref.current.value="";
+    }
+
+    const user = await signInWithEmailAndPassword(
+      auth,
+      id_ref.current.value,
+      pw_ref.current.value
+    ).catch((err)=>{
+      const errorCode = err.code;
+      console.log(errorCode);
+
+      if(errorCode === "auth/user-not-found"){
+        alert("존재하지 않는 회원입니다.");
+      }else if(errorCode === "auth/wrong-password"){
+        alert("잘못된 비밀번호입니다.");
+        pw_ref.current.value="";
+      }else if(errorCode === "auth/invalid-email"){
+        alert("유효하지 않는 아이디입니다.");
+      }else{ alert("다시 시도해주세요.");};
+    })
+
+    const user_docs = await getDocs(
+      query(collection(db, "users"), where("user_id", "==", user.user.email))
+    );
+
+    user_docs.forEach((u) => {
+      console.log(u.data());
+      alert("환영합니다! "+ u.data().name+"님");
+      newText();
+      navigate("/Home");
+    });
+  };
+
   return (
     <Body>
       <h1>Til</h1>
       <LoginForm>
         <Input ref={id_ref} placeholder="아이디(이메일)"/> <br />
-        <Input ref={pw_ref} placeholder="비밀번호"/> <br />
-        <LoginBtn onClick={() => {
-            navigate("/Home");
-          }}>로그인</LoginBtn><br />
+        <Input ref={pw_ref} type="password" placeholder="비밀번호"/> <br />
+        <LoginBtn onClick={loginFB}>로그인</LoginBtn><br />
         <SignupBtn
           onClick={() => {
             navigate("/sign_up");

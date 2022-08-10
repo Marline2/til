@@ -6,6 +6,7 @@ import Home from './Home';
 import AddTil from './AddTil';
 import Login from "./Login";
 import Signup from "./Signup";
+import InfoChange from "./InfoChange";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/sign_up" element={<Signup/>} />
           <Route path="/home" element={<Home />} />
           <Route path="/add" element={<AddTil />} />
+          <Route path="/info" element={<InfoChange />} />
         </Routes>
       </All>
     </div>
