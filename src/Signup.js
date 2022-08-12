@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { auth, db, storage } from "./shared/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { auth, storage } from "./shared/firebase";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+import NullImg from "./shared/img/null_img.jpg";
 
 const Signup = () => {
   const id_ref = React.useRef(null);
@@ -15,7 +18,11 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const changeImgText = async(e)=> {
+  React.useCallback(() => {
+    changeImgText();
+  }, []);
+
+  const changeImgText = async (e) => {
     if (img_ref.current.value !== "") {
       const fileName = img_ref.current.value;
       setPlaceholder(fileName);
@@ -31,23 +38,23 @@ const Signup = () => {
 
       img_ref.current = { url: file_url };
       console.log(img_ref.current);
-
     } else {
       alert("첨부 실패");
     }
-  }
+  };
 
-  function newText(){
-    id_ref.current.value="";
-    name_ref.current.value="";
-    pw_ref.current.value="";
-    img_ref.current.value="";
+  function newText() {
+    id_ref.current.value = "";
+    name_ref.current.value = "";
+    pw_ref.current.value = "";
+    img_ref.current.value = "";
     setPlaceholder("첨부파일");
   }
 
-  function check_email(str){
-    var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-    if(!reg_email.test(str)){
+  function check_email(str) {
+    var reg_email =
+      /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+    if (!reg_email.test(str)) {
       return true;
     } else {
       return false;
@@ -55,10 +62,9 @@ const Signup = () => {
   }
 
   const signupFB = async () => {
-    if (
-      id_ref.current.value === "" ) {
+    if (id_ref.current.value === "") {
       return alert("아이디를 입력해주세요.");
-    }else if(check_email(id_ref.current.value)){
+    } else if (check_email(id_ref.current.value)) {
       return alert("유효한 이메일을 입력해주세요.");
     } else if (name_ref.current.value === "") {
       return alert("이름을 입력해주세요.");
@@ -68,23 +74,29 @@ const Signup = () => {
     ) {
       return alert("비밀번호를 6자 이상 입력해주세요.");
     } else {
-      const user_doc = await addDoc(collection(db, "users"), {
-        user_id: id_ref.current.value,
-        name: name_ref.current?.value,
-        image_url: img_ref.current?.url,
-      });
-      console.log(user_doc.id);
-
-      const user = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         id_ref.current.value,
         pw_ref.current.value
-      ).then((user)=>{
-        console.log(user);
-        newText();
-        navigate("/");
+      ).catch((err)=>{
+          console.log(err);
+          alert("아이디가 중복되거나, 기타 오류입니다.");
       })
-    }  
+
+      if(!img_ref.current.url){
+        await updateProfile(auth.currentUser, {
+          displayName: name_ref.current.value,
+          photoURL: NullImg,
+        })
+      }else{
+        await updateProfile(auth.currentUser, {
+          displayName: name_ref.current.value,
+          photoURL: img_ref.current.url,
+        })
+      }
+      alert("가입이 완료되었습니다.");
+      navigate("/");
+    }
   };
 
   return (
@@ -92,7 +104,7 @@ const Signup = () => {
       <h1>
         회원가입<Span>기본정보입력</Span>
       </h1>
-      <Line/>
+      <Line />
       <Form>
         <span>아이디</span>
         <input ref={id_ref} placeholder="이메일 주소" />
@@ -103,7 +115,7 @@ const Signup = () => {
       </Form>
       <Form>
         <span>비밀번호</span>
-        <input type="password" ref={pw_ref}/>
+        <input type="password" ref={pw_ref} />
       </Form>
       <FormImg>
         <FormText>이미지</FormText>
@@ -125,7 +137,13 @@ const Signup = () => {
       <BtnForm>
         <button onClick={signupFB}>확인</button>
         <button onClick={newText}>새로 입력</button>
-        <button onClick={()=>{navigate("/")}}>뒤로 가기</button>
+        <button
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          뒤로 가기
+        </button>
       </BtnForm>
     </Body>
   );
@@ -187,7 +205,7 @@ const FormFile = styled.div`
     background-color: #999999;
     cursor: pointer;
 
-    :hover{
+    :hover {
       background-color: gray;
     }
   }
@@ -207,7 +225,7 @@ const ShowUrl = styled.input`
 
 const Line = styled.div`
   content: "";
-  border-bottom: 1px solid #C0C0C0;
+  border-bottom: 1px solid #c0c0c0;
   width: 23em;
   margin: 1em auto;
 `;
@@ -217,18 +235,18 @@ const BtnForm = styled.div`
   flex-direction: row;
   justify-content: center;
 
-  button{
-    border:1px solid #C0C0C0;
-    margin:0.2em;
+  button {
+    border: 1px solid #c0c0c0;
+    margin: 0.2em;
     background-color: #708090;
-    color:white;
-    font-size:1em;
-    padding:0.5em;
+    color: white;
+    font-size: 1em;
+    padding: 0.5em;
     border-radius: 5%;
     width: 6em;
     cursor: pointer;
 
-    :hover{
+    :hover {
       background-color: #696969;
     }
   }

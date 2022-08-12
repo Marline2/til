@@ -1,24 +1,15 @@
-import React, { useReducer } from "react";
+import React from "react";
 import styled from "styled-components";
-import { auth, db, storage } from "./shared/firebase";
-import { updatePassword } from "firebase/auth";
-import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { auth, storage } from "./shared/firebase";
+import { updatePassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
-import { async } from "@firebase/util";
 
 const InfoChange = () => {
   const name_ref = React.useRef(null);
   const pw_ref = React.useRef(null);
   const img_ref = React.useRef(null);
   const [placeholder, setPlaceholder] = React.useState("첨부파일");
-  const [user_doc, setUserDoc] = React.useState("");
 
   const navigate = useNavigate();
   const user = auth.currentUser;
@@ -39,6 +30,21 @@ const InfoChange = () => {
       console.log("비밀번호 변경 없음!");
     }
 
+    if(name_ref.current.value !== ""){
+      const update_name = await updateProfile(user, {
+        displayName : name_ref.current.value
+      })
+    } else {
+      console.log("이름 변경 없음!");
+    }
+
+    if(img_ref.current.value !== ""){
+      const update_img = await updateProfile(user, {
+        photoURL: img_ref.current.url
+      })
+    } else {
+      console.log("이미지 변경 없음!");
+    }
     alert("수정 완료");
   };
 
@@ -46,15 +52,12 @@ const InfoChange = () => {
     if (img_ref.current.value !== "") {
       const fileName = img_ref.current.value;
       setPlaceholder(fileName);
-
       console.log(e.target.files[0]);
-
       const uploaded_file = await uploadBytes(
         ref(storage, `images/${e.target.files[0].name}`),
         e.target.files[0]
       );
       const file_url = await getDownloadURL(uploaded_file.ref);
-
       img_ref.current = { url: file_url };
     } else {
       alert("첨부 실패");

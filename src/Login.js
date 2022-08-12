@@ -1,13 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "./shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { db } from "./shared/firebase";
-
-import { getDocs, where, query, collection } from "firebase/firestore";
-
 
 const Login = () => {
   const id_ref = React.useRef(null);
@@ -16,19 +12,17 @@ const Login = () => {
   const navigate = useNavigate();
 
   const loginFB = async () => {
-    function newText(){
-      id_ref.current.value="";
-      pw_ref.current.value="";
-    }
-
     const user = await signInWithEmailAndPassword(
       auth,
       id_ref.current.value,
       pw_ref.current.value
-    ).catch((err)=>{
+    ).then((user)=>{
+      console.log(user);
+      alert("환영합니다! "+ user.user.displayName+"님");
+      navigate("/Home");
+    }).catch((err)=>{
       const errorCode = err.code;
       console.log(errorCode);
-
       if(errorCode === "auth/user-not-found"){
         alert("존재하지 않는 회원입니다.");
       }else if(errorCode === "auth/wrong-password"){
@@ -36,19 +30,8 @@ const Login = () => {
         pw_ref.current.value="";
       }else if(errorCode === "auth/invalid-email"){
         alert("유효하지 않는 아이디입니다.");
-      }else{ alert("다시 시도해주세요.");};
+      }else{ alert("비밀번호를 입력해주세요.");};
     })
-
-    const user_docs = await getDocs(
-      query(collection(db, "users"), where("user_id", "==", user.user.email))
-    );
-
-    user_docs.forEach((u) => {
-      console.log(u.data());
-      alert("환영합니다! "+ u.data().name+"님");
-      newText();
-      navigate("/Home");
-    });
   };
 
   return (
