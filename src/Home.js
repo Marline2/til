@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./shared/firebase";
-import NullImg from "./shared/img/null_img.jpg";
 import Modal from './AddTils';
 
 import RecentList from "./RecentList";
@@ -13,19 +12,26 @@ const Home = () => {
   const [name, setUserName] = React.useState("User");
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [reset, setReset] = React.useState(false);
+  const [photo, setPhoto] = React.useState(null);
 
   const openModal = ()=>{
     setModalOpen(true);
   };
   const closeModal = ()=>{
     setModalOpen(false);
+    if(reset === false){
+      setReset(true);
+    }else{
+      setReset(false);
+    }
   }
 
   const loginCheck = async (user) => {
     if (user) {
       setIsLogin(true);
       setUserName(user.displayName);
-      document.getElementById("img").src = user.photoURL;
+      setPhoto(user.photoURL);
     } else {
       setIsLogin(false);
       navigate("/");
@@ -49,20 +55,19 @@ const Home = () => {
             <span
               onClick={() => {
                 openModal();
-
-                // navigate("/add");
               }}
               className="material-symbols-outlined"
             >
               maps_ugc
             </span>
-            <Modal open={modalOpen} close={closeModal} header="Modal heading"/>
+            <Modal open={modalOpen} close={closeModal} name={name} photo={photo}
+            header="Modal heading"/>
           </AddButton>
         </TitleZone>
-        <RecentList />
+        <RecentList reset={reset}/>
       </Main>
       <User>
-        <UserImg src={NullImg} alt="img" id="img" />
+        <UserImg src={photo} alt="img"/>
         <h2>{name}</h2>
         <button>나의 TIL 보기</button>
         <span
@@ -75,7 +80,9 @@ const Home = () => {
         <span
           onClick={() => {
             signOut(auth);
+            alert("로그아웃 되었습니다.");
             navigate("/");
+            
           }}
         >
           로그아웃
@@ -97,7 +104,6 @@ const Menu = styled.div`
 `;
 
 const Main = styled.div`
-  background-color: aliceblue;
   width: 35em;
 `;
 

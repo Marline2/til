@@ -1,24 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AddTils.css";
 
 const Modal = (props) => {
-  // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-  const { open, close } = props;
+  const { open, close, name, photo} = props;
   const work_ref = React.useRef(null);
   const description_ref = React.useRef(null);
   const study_time_ref = React.useRef(null);
+  const today = new Date();
 
-  const navigate = useNavigate();
+  const year = today.getFullYear();
+  const month = today.getMonth()+1;
+  const date = today.getDate();
+
+  const day = year+". "+month+". "+date;
 
   const addTilForm = () => {
     const til_data = {
       work: work_ref.current.value,
       study_time: study_time_ref.current.value,
       description: description_ref.current.value,
+      name: name,
+      photo: photo,
+      day : day,
     };
 
     const empty_input = Object.values(til_data).findIndex((v) => v === "");
@@ -55,7 +61,7 @@ const Modal = (props) => {
     description_ref.current.value = "";
     study_time_ref.current.value = "";
 
-    navigate(-1);
+    close();
   };
 
   return (
@@ -71,8 +77,9 @@ const Modal = (props) => {
               <InputBoxBig ref={description_ref} placeholder="내용" />
             </Form>
             <BtnZone>
-            <Btn onClick={addTilForm}>추가하기 🍓</Btn>
-            <Btn className="close" onClick={close}>뒤로가기 🍓
+            <Btn onClick={addTilForm}>추가하기 &#127818;</Btn>
+            <Btn className="close" onClick={close}>뒤로가기 &#127823;	
+
             </Btn>
             </BtnZone>
           </AddTilForm>
@@ -94,13 +101,13 @@ const AddTilForm = styled.div`
 
 const Title = styled.h3`
   text-align: center;
-  height: 2em;
+  height: 1.5em;
   font-size: 1em;
 `;
 
 const Form = styled.div`
   height: 8em;
-  width: 14em;
+  width: 13em;
 `;
 
 const InputBox = styled.input`
@@ -138,6 +145,15 @@ const Btn = styled.button`
   cursor: pointer;
   &:hover {
     background-color: pink;
+  }
+
+  &.close{
+    background-color:	#EEE8AA;
+
+    :hover{
+      background-color:	#90EE90;
+
+    }
   }
 `;
 

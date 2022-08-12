@@ -5,61 +5,54 @@ import { useSelector, useDispatch } from "react-redux";
 import { setTil } from "./redux/modules/tilSlice";
 import axios from "axios";
 
-const RecentList = () => {
+const RecentList = (props) => {
+  const { reset } = props;
   const til_lists = useSelector((state) => state.til.til_lists);
   const dispatch = useDispatch();
 
   const getTilList = async () => {
     const response = await axios.get("http://localhost:5001/til_list");
-    console.log(response.data);
     const til = response.data;
     dispatch(setTil(til));
   };
 
   React.useEffect(() => {
     getTilList();
-  }, []);
+  }, [reset]);
 
   return (
     <div>
-      {til_lists.map((til, idx) => {
-        if (idx % 3 === 0) {
-          return (
-            <List key={idx}>
-              <h2>🍰 {til.work}</h2>
-              <Time>{til.study_time}</Time>
-              <Desc>{til.description}</Desc>
-            </List>
-          );
-        } else if (idx % 3 === 1) {
-          return (
-            <List key={idx}>
-              <h2>🍨 {til.work}</h2>
-              <Time>{til.study_time}</Time>
-              <Desc>{til.description}</Desc>
-            </List>
-          );
-        } else if (idx % 3 === 2) {
-          return (
-            <List key={idx}>
-              <h2>🍩 {til.work}</h2>
-              <Time>{til.study_time}</Time>
-              <Desc>{til.description}</Desc>
-            </List>
-          );
-        }
-        return <h1>목록을 불러올 수 없습니다!</h1>;
+      {til_lists.slice(0).reverse().map((til, idx) => {
+        return (
+          <List key={idx}>
+            <h3>
+              {til.day}
+              &nbsp;<span className="material-symbols-outlined">calendar_today</span>
+            </h3>
+            <Title>
+              <h2>
+                <img src={til.photo} alt="img" />
+                <br />
+                <Name>
+                  {til.name}
+                </Name>
+              </h2>
+              <SubTitle>
+                <p><span className="material-symbols-outlined">timer</span>
+                  {til.study_time}</p>
+                <h2>{til.work}</h2>
+              </SubTitle>
+            </Title>
+            <Desc>{til.description}</Desc>
+          </List>
+        );
       })}
     </div>
   );
 };
 
-const Time = styled.h3`
-  margin: -0.5em 0 0 1em;
-`;
-
 const Desc = styled.p`
-  margin: 0.5em 0 0.5em 1em;
+  margin: -2.2em 0 2em 4.2em;
   font-size: 1em;
 `;
 
@@ -67,7 +60,58 @@ const List = styled.div`
   border: 1px solid gray;
   padding: 1em;
   margin-bottom: 1em;
+
+  h3 {
+    font-size: 0.8em;
+    font-weight: normal;
+    text-align: right;
+    margin: 0;
+
+    span{
+      font-size:0.75em;
+    }
+  }
+
 `;
 
+const Title = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  img {
+    width: 2em;
+    height: 2em;
+    border-radius: 10%;
+    margin-right: 0.8em;
+    border:1px solid gray;
+  }
+`;
+
+const Name = styled.div`
+    font-size: 0.4em;
+    width: 5.2em;
+    text-align: center;
+    margin: 0;
+`
+
+const SubTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 2em;
+
+  h2 {
+    margin-top: -0.8em;
+  }
+
+  p {
+    font-size: 1em;
+    border-radius: 10%;
+    width: fit-content;
+    background-color: #dff1df;
+    span{
+      font-size:0.8em;
+    }
+  }
+`;
 
 export default RecentList;
