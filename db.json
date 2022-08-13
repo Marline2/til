@@ -7,7 +7,8 @@
       "name": "말린이<3",
       "photo": "https://firebasestorage.googleapis.com/v0/b/authex-e23c2.appspot.com/o/images%2Fmarlinesquare.jpg?alt=media&token=6bc36e89-e0a9-43e9-84a5-aa0fe64265a9",
       "day": "2022. 8. 13",
-      "id": 1
+      "id": 1,
+      "email": "mar@dev.com"
     },
     {
       "work": "TypeScript",
@@ -16,7 +17,18 @@
       "name": "아무개",
       "photo": "/static/media/null_img.d5b294d68ae54b09b21a.jpg",
       "day": "2022. 8. 13",
-      "id": 2
+      "id": 2,
+      "email": "mar2@dev.com"
+    },
+    {
+      "work": "Firebase",
+      "study_time": "04:00",
+      "description": "Authentication 공부",
+      "name": "말린이<3",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/authex-e23c2.appspot.com/o/images%2Fmarlinesquare.jpg?alt=media&token=6bc36e89-e0a9-43e9-84a5-aa0fe64265a9",
+      "day": "2022. 8. 14",
+      "email": "mar@dev.com",
+      "id": 4
     }
   ]
 }

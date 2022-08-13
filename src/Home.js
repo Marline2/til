@@ -6,32 +6,33 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./shared/firebase";
 import Modal from './AddTils';
 
+import { useSelector, useDispatch } from "react-redux";
+import { setEmailTilList, setUser, showList, showUser } from "./redux/modules/tilSlice";
+
 import RecentList from "./RecentList";
 const Home = () => {
   const [is_login, setIsLogin] = React.useState(true);
-  const [name, setUserName] = React.useState("User");
-  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [reset, setReset] = React.useState(false);
-  const [photo, setPhoto] = React.useState(null);
+  const user_info = useSelector(showUser);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const openModal = ()=>{
     setModalOpen(true);
   };
   const closeModal = ()=>{
     setModalOpen(false);
-    if(reset === false){
-      setReset(true);
-    }else{
-      setReset(false);
-    }
   }
 
   const loginCheck = async (user) => {
     if (user) {
       setIsLogin(true);
-      setUserName(user.displayName);
-      setPhoto(user.photoURL);
+      dispatch(setUser({
+        name: user.displayName,
+        email : user.email,
+        photo : user.photoURL
+      }));
     } else {
       setIsLogin(false);
       navigate("/");
@@ -39,15 +40,11 @@ const Home = () => {
   };
 
   React.useEffect(() => {
-    onAuthStateChanged(auth, loginCheck);
+    onAuthStateChanged(auth, loginCheck)
   }, []);
 
   return (
     <ListTil>
-      <Menu>
-        <p>00님</p>
-        <i className="fa-solid fa-comment-plus"></i>
-      </Menu>
       <Main>
         <TitleZone>
           <h1>TIL ✍</h1>
@@ -60,16 +57,16 @@ const Home = () => {
             >
               maps_ugc
             </span>
-            <Modal open={modalOpen} close={closeModal} name={name} photo={photo}
+            <Modal open={modalOpen} close={closeModal}
             header="Modal heading"/>
           </AddButton>
         </TitleZone>
-        <RecentList reset={reset}/>
+        <RecentList/>
       </Main>
       <User>
-        <UserImg src={photo} alt="img"/>
-        <h2>{name}</h2>
-        <button>나의 TIL 보기</button>
+        <UserImg src={user_info.photo} alt="img"/>
+        <h2>{user_info.name}</h2>
+        <button onClick={ ()=>{dispatch(setEmailTilList(user_info));}}>나의 TIL 보기</button>
         <span
           onClick={() => {
             navigate("/info");
@@ -97,10 +94,6 @@ const ListTil = styled.div`
   display: flex;
   flex-direction: row;
   text-overflow: unset;
-`;
-
-const Menu = styled.div`
-  background-color: saddlebrown;
 `;
 
 const Main = styled.div`

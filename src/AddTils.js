@@ -1,30 +1,35 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { showUser, addTilList} from "./redux/modules/tilSlice";
 
-import axios from "axios";
 import "./AddTils.css";
 
 const Modal = (props) => {
-  const { open, close, name, photo} = props;
+  const { open, close} = props;
+
   const work_ref = React.useRef(null);
   const description_ref = React.useRef(null);
   const study_time_ref = React.useRef(null);
-  const today = new Date();
 
+  const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth()+1;
   const date = today.getDate();
-
   const day = year+". "+month+". "+date;
+
+  const dispatch = useDispatch();
+  const user = useSelector(showUser);
 
   const addTilForm = () => {
     const til_data = {
       work: work_ref.current.value,
       study_time: study_time_ref.current.value,
       description: description_ref.current.value,
-      name: name,
-      photo: photo,
+      name: user.name,
+      photo: user.photo,
       day : day,
+      email: user.mail
     };
 
     const empty_input = Object.values(til_data).findIndex((v) => v === "");
@@ -49,11 +54,7 @@ const Modal = (props) => {
 
   const noEmpty = async (til_data) => {
     console.log(til_data);
-    const postList = await axios.post(
-      "http://localhost:5001/til_list",
-      til_data
-    );
-    console.log(postList);
+    dispatch(addTilList(til_data));
 
     alert("추가 완료");
 

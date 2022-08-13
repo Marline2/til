@@ -2,23 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
-import { setTil } from "./redux/modules/tilSlice";
-import axios from "axios";
+import { showList, getTilList} from "./redux/modules/tilSlice";
 
-const RecentList = (props) => {
-  const { reset } = props;
-  const til_lists = useSelector((state) => state.til.til_lists);
+
+const RecentList = () => {
+  const til_lists = useSelector(showList);
   const dispatch = useDispatch();
 
-  const getTilList = async () => {
-    const response = await axios.get("http://localhost:5001/til_list");
-    const til = response.data;
-    dispatch(setTil(til));
-  };
-
   React.useEffect(() => {
-    getTilList();
-  }, [reset]);
+    dispatch(getTilList());
+  }, []);
 
   return (
     <div>
