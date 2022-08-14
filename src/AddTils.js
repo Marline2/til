@@ -29,7 +29,7 @@ const Modal = (props) => {
       name: user.name,
       photo: user.photo,
       day : day,
-      email: user.mail
+      email: user.email
     };
 
     const empty_input = Object.values(til_data).findIndex((v) => v === "");

@@ -7,7 +7,7 @@ import { auth } from "./shared/firebase";
 import Modal from './AddTils';
 
 import { useSelector, useDispatch } from "react-redux";
-import { setEmailTilList, setUser, showList, showUser } from "./redux/modules/tilSlice";
+import { setEmailTilList, setUser, getTilList, showUser } from "./redux/modules/tilSlice";
 
 import RecentList from "./RecentList";
 const Home = () => {
@@ -39,6 +39,17 @@ const Home = () => {
     }
   };
 
+  const showMyList = () =>{
+    const btn = document.getElementById("myTil");
+    if(btn.innerText=== "나의 TIL 보기"){
+      btn.innerText = "전체 TIL 보기";
+      dispatch(setEmailTilList(user_info));
+    }else{
+      btn.innerText = "나의 TIL 보기";
+      dispatch(getTilList(user_info));
+    }
+  }
+
   React.useEffect(() => {
     onAuthStateChanged(auth, loginCheck)
   }, []);
@@ -66,7 +77,9 @@ const Home = () => {
       <User>
         <UserImg src={user_info.photo} alt="img"/>
         <h2>{user_info.name}</h2>
-        <button onClick={ ()=>{dispatch(setEmailTilList(user_info));}}>나의 TIL 보기</button>
+        <button id="myTil" onClick={ ()=>{
+          showMyList();
+          }}>나의 TIL 보기</button>
         <span
           onClick={() => {
             navigate("/info");

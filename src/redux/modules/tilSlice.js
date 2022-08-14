@@ -45,18 +45,17 @@ export const getTilList = (til_lists) => async (dispatch) => {
 export const setEmailTilList = (user_info) => async (dispatch) => {
   const response = await axios.get("http://localhost:5001/til_list").then((res)=>{
     const data = res.data;
-    console.log(user_info.email);
-    const email_til = data.map((til, idx)=>{
-      console.log(til.email);
-    if(til.email === user_info.email){
-      return {...til, til};
-
-      //이터럴객체로 만들기
-    }else{
-      return;
-    }})
-    console.log(email_til);
-  // dispatch(setTil(email_til));
+    let email_til = data.map((til, idx)=>{
+      if(til.email === user_info.email){
+        return til;
+      }else{ return null;}
+    });
+    email_til = email_til.filter((til, idx)=>til !== null)
+    if(email_til.length === 0){
+      return  dispatch(setTil([{work:"작성된 TIL이 없습니다."}]));;
+    }else if(email_til.length > 0){
+      dispatch(setTil(email_til));
+    }
   })
 };
 
