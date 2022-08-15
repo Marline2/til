@@ -68,7 +68,9 @@ const Signup = () => {
       return alert("유효한 이메일을 입력해주세요.");
     } else if (name_ref.current.value === "") {
       return alert("이름을 입력해주세요.");
-    } else if (
+    } else if (name_ref.current.value.length >8){
+      return alert("이름을 8자 이하로 입력해주세요.");
+    }else if (
       pw_ref.current.value === "" ||
       pw_ref.current.value.length <= 5
     ) {
