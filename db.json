@@ -39,7 +39,16 @@
       "day": "2022. 8. 15",
       "email": "dorumuk@dev.com",
       "id": 5
+    },
+    {
+      "work": "Axios",
+      "study_time": "02:00",
+      "description": "Axios 공부",
+      "name": "2말린",
+      "photo": "/static/media/null_img.d5b294d68ae54b09b21a.jpg",
+      "day": "2022. 8. 16",
+      "email": "mar2@dev.com",
+      "id": 6
     }
-    
   ]
 }

@@ -152,10 +152,18 @@ const Signup = () => {
 };
 
 const Body = styled.div`
-  margin: auto;
+  box-shadow: 1px 1px 3px 1px gray;
+  margin: 4em auto;
+  width:20em;
   border: 1px solid #708090;
   border-radius: 10%;
   padding: 1em 2em 2em 2em;
+  background-color: white;
+
+  @media screen and (max-width: 600px){
+    width:23em;
+    font-size:80%;
+  }
 `;
 
 const Span = styled.span`
@@ -172,6 +180,7 @@ const Form = styled.div`
   span {
     margin: 0 3.5em 0 0;
     width: 5em;
+    font-size: 0.8em;
   }
 
   input {
@@ -192,6 +201,7 @@ const FormText = styled.span`
   margin-right: 3.6em;
   margin-left: 0;
   width: 5em;
+  font-size: 0.8em;
 `;
 
 const FormFile = styled.div`
@@ -206,6 +216,11 @@ const FormFile = styled.div`
     color: #fff;
     background-color: #999999;
     cursor: pointer;
+    
+  @media screen and (max-width: 600px){
+    padding-top:0.1em;
+    padding-bottom:0.2em;
+  }
 
     :hover {
       background-color: gray;
@@ -219,16 +234,21 @@ const FormFile = styled.div`
 
 const ShowUrl = styled.input`
   height: 2.3em;
-  width: 12em;
+  width: 9.6em;
   border: 1px solid #dddddd;
   background-color: white;
   color: #999999;
+
+  @media screen and (max-width: 600px){
+    width:13.5em;
+    font-size:80%;
+  }
 `;
 
 const Line = styled.div`
   content: "";
   border-bottom: 1px solid #c0c0c0;
-  width: 23em;
+  width: 20em;
   margin: 1em auto;
 `;
 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./shared/firebase";
 import Modal from "./AddTils";
-
+import { Rank } from "./RecentList";
 import { useSelector, useDispatch } from "react-redux";
 import {
   showEmailTilList,
@@ -22,6 +22,7 @@ const Home = () => {
   const [randomData, setRandomData] = React.useState(Math.random());
   const [is_login, setIsLogin] = React.useState(true);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [click, setClick] = React.useState(null);
   const user_info = useSelector(showUser);
   const rank = useSelector(showRank);
 
@@ -31,9 +32,12 @@ const Home = () => {
   const WantToBack = () => {
     if (back === true) {
       return (
-        <TextHome>
-          <span id="home">홈으로</span>
-        </TextHome>
+        <div>
+          <TextHome>
+            <span id="home">홈으로</span>
+          </TextHome>
+          <ClickUser>&#127793;{click}</ClickUser>
+        </div>
       );
     } else {
       return null;
@@ -52,6 +56,11 @@ const Home = () => {
     showAni();
     setBack(true);
   };
+
+  const showClickUser = (props) => {
+    setClick(props);
+  };
+
 
   const loginCheck = async (user) => {
     if (user) {
@@ -87,6 +96,7 @@ const Home = () => {
     }
   };
 
+  
   React.useEffect(() => {
     onAuthStateChanged(auth, loginCheck);
   }, []);
@@ -95,13 +105,14 @@ const Home = () => {
     <ListTil>
       <Main>
         <TitleZone>
-          <h1>
+          <h1>&nbsp;&nbsp;
             <span
               style={{ cursor: "pointer" }}
               onClick={() => {
                 dispatch(getTilList());
                 setBack(false);
                 showAni();
+                setClick(null);
               }}
             >
               TIL
@@ -122,7 +133,12 @@ const Home = () => {
           </AddButton>
         </TitleZone>
         <WantToBack />
-        <RecentList back={userBack} ani={showAni} keys={randomData} />
+        <RecentList
+          click={showClickUser}
+          back={userBack}
+          ani={showAni}
+          keys={randomData}
+        />
       </Main>
       <div>
         <User>
@@ -153,21 +169,11 @@ const Home = () => {
             로그아웃
           </span>
         </User>
-        <Rank>
-          <h3>활동 순위 TOP 3</h3>
-          {rank.map((e, idx) => {
-            if (idx === 0) {
-              return <p key={idx}><span>1등</span>{e.e}</p>;
-            } else if (idx === 1) {
-              return <p key={idx}><span>2등</span>{e.e}</p>;
-            } else if (idx === 2) {
-              return <p key={idx}><span>3등</span>{e.e}</p>;
-            } else {
-              return null;
-            }
-          })}
-          <h4>나의 순위</h4>
-        </Rank>
+        <Rank
+          click={showClickUser}  
+          back={userBack}
+          ani={showAni}
+          rank={rank}/>
       </div>
     </ListTil>
   );
@@ -215,15 +221,26 @@ const TextHome = styled.div`
   }
 `;
 
+const ClickUser = styled.h4`
+  text-align: right;
+  margin-right: 1em;
+  margin-top: -1.8em;
+  margin-bottom: -0.5em;
+  animation: show 1.5s;
+`;
+
 const ListTil = styled.div`
-  width: 60em;
-  height: 55em;
-  margin: auto;
+border-radius: 5%;
+  margin: 2em auto;
+  background-color: white;
+  padding:2em;
+  max-width: 60em;
+  height: 45em;
   display: flex;
   flex-direction: row;
-  text-overflow: unset;
   cursor: default;
-  margin-top: 2em;
+  margin-top: 3em;
+  box-shadow: 1px 1px 3px 1px gray;
 `;
 
 const Main = styled.div`
@@ -238,7 +255,6 @@ const User = styled.div`
   padding: 2em;
   margin: 1em;
   border-radius: 10%;
-
   h2 {
     margin-top: -0.1em;
     margin-bottom: 0.2em;
@@ -339,13 +355,5 @@ const UserImg = styled.img`
   border-radius: 20%;
 `;
 
-const Rank = styled.div`
-  border: 1px solid gray;
-  width: 10em;
-  height: 17em;
-  text-align: center;
-  padding: 2em;
-  margin: 1em;
-  border-radius: 10%;
-`;
+
 export default Home;

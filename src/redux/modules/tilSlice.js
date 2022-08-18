@@ -73,6 +73,7 @@ export const showEmailTilList = (user_email) => async(dispatch) =>{
 export const addTilList = (til_lists) => async (dispatch) => {
   const response = await axios.post("http://localhost:5001/til_list", til_lists);
   dispatch(addTil(response.data));
+  dispatch(getRank(response.data));
 };
 
 export const getRank = (til_lists) => async (dispatch) => {

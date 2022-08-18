@@ -54,15 +54,17 @@ const Login = () => {
 };
 
 const Body = styled.div`
-  margin: auto;
   text-align: center;
   border: 1px solid #708090;
   border-radius: 10%;
   padding: 1em 2em 2em 2em;
+  margin:5em auto;
+  background-color: white;
+  box-shadow: 1px 1px 3px 1px gray;
 `;
 
 const LoginForm = styled.div`
-  width: 300px;
+  width: 250px;
   margin: auto;
 `;
 

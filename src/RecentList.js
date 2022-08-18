@@ -35,14 +35,99 @@ const NullComponent = (props) => {
   }
 };
 
-const RecentList = (props) => {
-  const { back, ani, keys } = props;
-  const til_lists = useSelector(showList);
+const Rank = (props) => {
+  const { rank, click, ani, back } = props;
   const dispatch = useDispatch();
 
   const clickUser = (til_email) => {
-    const { alt } = til_email;
+    const user_email = til_email;
+    click(user_email);
+    dispatch(showEmailTilList(user_email));
+    ani();
+    back();
+  };
+
+  return (
+    <Ranks>
+      <h3>활동 TOP 3 &#127942;</h3>
+      <div>
+      {rank.map((e, idx) => {
+        if (idx === 0) {
+          return (
+            <RankNumber key={idx}>
+              <span style={{ borderBottom: "2px solid gold" }}>1등</span>{" "}
+              &#127940;&nbsp;
+              <Count>
+                TIL : <CountNum>{e.count}</CountNum>
+              </Count>
+              <br />
+              &nbsp;&nbsp;
+              <RankEmail
+                onClick={() => {
+                  clickUser(e.e);
+                }}
+              >
+                {e.e}
+              </RankEmail>
+            </RankNumber>
+          );
+        } else if (idx === 1) {
+          return (
+            <RankNumber key={idx}>
+              <span style={{ borderBottom: "2px solid silver" }}>2등</span>{" "}
+              &#127946;&nbsp;
+              <Count>
+                TIL : <CountNum>{e.count}</CountNum>
+              </Count>
+              <br />
+              &nbsp;&nbsp;
+              <RankEmail
+                onClick={() => {
+                  clickUser(e.e);
+                }}
+              >
+                {e.e}
+              </RankEmail>
+            </RankNumber>
+          );
+        } else if (idx === 2) {
+          return (
+            <RankNumber key={idx}>
+              <span style={{ borderBottom: "2px solid brown" }}>3등</span>
+              &nbsp;&#127939;&nbsp;&nbsp;
+              <Count>
+                TIL : <CountNum>{e.count}</CountNum>
+              </Count>
+              <br />
+              &nbsp;&nbsp;
+              <RankEmail
+                onClick={() => {
+                  clickUser(e.e);
+                }}
+              >
+                {e.e}
+              </RankEmail>
+            </RankNumber>
+          );
+        } else {
+          return null;
+        }
+      })}
+      </div>
+    </Ranks>
+  );
+};
+
+const RecentList = (props) => {
+  const { back, ani, keys, click } = props;
+  const til_lists = useSelector(showList);
+
+  const dispatch = useDispatch();
+
+
+  const clickUser = (til_email) => {
     const user_email = til_email.target.alt;
+    click(user_email);
     dispatch(showEmailTilList(user_email));
     ani();
     back();
@@ -51,52 +136,51 @@ const RecentList = (props) => {
   React.useEffect(() => {
     dispatch(getTilList());
     ani();
-    
   }, []);
 
   return (
     <Scroll>
       <NullComponent til_lists={til_lists} />
-     <Ani key={keys}>
-      {til_lists
-        .slice(0)
-        .reverse()
-        .map((til, idx) => {
-          return (
-            <List key={idx}>
-              <h3>
-                {til.day}
-                &nbsp;
-                <span className="material-symbols-outlined">
-                  calendar_today
-                </span>
-                <br />
-                <span className="material-symbols-outlined">timer</span>&nbsp;
-                <span className="time">{til.study_time}</span>
-              </h3>
-              <Title>
-                <h2>
-                  <div className="tooltip">
-                    <img
-                      src={til.photo}
-                      alt={til.email}
-                      onClick={(alt) => {
-                        clickUser(alt);
-                      }}
-                    />
-                    <span className="tooltiptextTop">TIL 보기</span>
-                  </div>
-                  <Name>{til.name}</Name>
-                </h2>
-                <SubTitle>
-                  <h2>{til.work}</h2>
-                  <p>{til.description}</p>
-                </SubTitle>
-              </Title>
-            </List>
-          );
-        })}
- </Ani>
+      <Ani key={keys}>
+        {til_lists
+          .slice(0)
+          .reverse()
+          .map((til, idx) => {
+            return (
+              <List key={idx}>
+                <h3>
+                  {til.day}
+                  &nbsp;
+                  <span className="material-symbols-outlined">
+                    calendar_today
+                  </span>
+                  <br />
+                  <span className="material-symbols-outlined">timer</span>&nbsp;
+                  <span className="time">{til.study_time}</span>
+                </h3>
+                <Title>
+                  <h2>
+                    <div className="tooltip">
+                      <img
+                        src={til.photo}
+                        alt={til.email}
+                        onClick={(alt) => {
+                          clickUser(alt);
+                        }}
+                      />
+                      <span className="tooltiptextTop">TIL 보기</span>
+                    </div>
+                    <Name>{til.name}</Name>
+                  </h2>
+                  <SubTitle>
+                    <h2>{til.work}</h2>
+                    <p>{til.description}</p>
+                  </SubTitle>
+                </Title>
+              </List>
+            );
+          })}
+      </Ani>
     </Scroll>
   );
 };
@@ -104,13 +188,12 @@ const RecentList = (props) => {
 const Scroll = styled.div`
   overflow-y: scroll;
   padding: 1em;
-  height: 80%;
+  height: 35em;
   cursor: default;
 
   ::-webkit-scrollbar {
     display: none;
   }
-
 `;
 
 const Ani = styled.div`
@@ -118,15 +201,14 @@ const Ani = styled.div`
   @keyframes show {
     from {
       opacity: 0;
-      margin-top: -2em;
+      margin-top: -3em;
     }
     to {
       opacity: 1;
-      margin-top: 0;
+      margin-top: 1;
     }
   }
 `;
-
 
 const List = styled.div`
   border: 1px solid gray;
@@ -229,4 +311,45 @@ const SubTitle = styled.div`
     font-size: 1em;
   }
 `;
+
+const Ranks = styled.div`
+  border: 1px solid gray;
+  width: 10em;
+  height: 16em;
+  text-align: center;
+  padding: 2em;
+  margin: 1em;
+  border-radius: 10%;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0em;
+  }
+`;
+
+const RankNumber = styled.p`
+  font-size: 1.2em;
+  font-weight: bold;
+  width: 10.7em;
+  margin-left: 0.5em;
+  text-align: left;
+`;
+const RankEmail = styled.span`
+  font-weight: lighter;
+  font-size: 0.7em;
+  cursor: pointer;
+  :hover {
+    font-weight: bold;
+  }
+`;
+const Count = styled.span`
+  font-size: 0.6em;
+
+`;
+const CountNum = styled.span`
+  font-weight: bold;
+  background-color: antiquewhite;
+  border-radius: 50%;
+`;
 export default RecentList;
+export { Rank };
