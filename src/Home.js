@@ -140,7 +140,7 @@ const Home = () => {
           keys={randomData}
         />
       </Main>
-      <div>
+      <MoblieDiv>
         <User>
           <UserImg src={user_info.photo} alt="img" />
           <h2>{user_info.name}</h2>
@@ -151,7 +151,7 @@ const Home = () => {
             }}
           >
             나의 TIL 보기
-          </button>
+          </button><br/>
           <span
             onClick={() => {
               navigate("/info");
@@ -174,7 +174,7 @@ const Home = () => {
           back={userBack}
           ani={showAni}
           rank={rank}/>
-      </div>
+      </MoblieDiv>
     </ListTil>
   );
 };
@@ -207,6 +207,11 @@ const TextHome = styled.div`
     top: -4.5em;
     left: 7em;
     margin-left: -6em;
+
+    @media screen and (max-width: 600px){
+    width:10em;
+    height:2.5em;
+    }
 
     ::after {
       content: "";
@@ -241,10 +246,31 @@ border-radius: 5%;
   cursor: default;
   margin-top: 3em;
   box-shadow: 1px 1px 3px 1px gray;
+  z-index: 3;
+  @media screen and (max-width: 600px){
+    flex-direction: column;
+    width:40em;
+    font-size:50%;
+  }
 `;
+
+const MoblieDiv = styled.div`
+  @media screen and (max-width: 600px){
+    flex-direction: row;
+    display: flex;
+    margin-top:5em;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  `
 
 const Main = styled.div`
   width: 35em;
+  @media screen and (max-width: 600px){
+    width:40em;
+    margin:0 auto;
+  }
 `;
 
 const User = styled.div`
@@ -255,6 +281,11 @@ const User = styled.div`
   padding: 2em;
   margin: 1em;
   border-radius: 10%;
+
+  @media screen and (max-width: 600px){
+    width:15em;
+    box-shadow: 1px 1px 3px 1px gray;
+  }
   h2 {
     margin-top: -0.1em;
     margin-bottom: 0.2em;
@@ -270,6 +301,10 @@ const User = styled.div`
     height: 3em;
     font-size: 0.9em;
     cursor: pointer;
+
+    @media screen and (max-width: 600px){
+    width:12em;
+  }
 
     :hover {
       background-color: #696969;

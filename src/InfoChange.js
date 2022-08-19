@@ -118,10 +118,12 @@ const InfoChange = () => {
 };
 
 const Body = styled.div`
-  margin: auto;
+  background-color: white;
+  margin: 5em auto;
   border: 1px solid #708090;
   border-radius: 10%;
   padding: 1em 2em 2em 2em;
+  box-shadow: 1px 1px 3px 1px gray;
 `;
 
 const Span = styled.span`

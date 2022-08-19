@@ -49,6 +49,26 @@
       "day": "2022. 8. 16",
       "email": "mar2@dev.com",
       "id": 6
+    },
+    {
+      "work": "REST API",
+      "study_time": "02:00",
+      "description": "REST API 공부",
+      "name": "마마",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/authex-e23c2.appspot.com/o/images%2Fbeach_ball.png?alt=media&token=06c06869-6266-45b8-8940-67d62238a87e",
+      "day": "2022. 8. 19",
+      "email": "mama@dev.com",
+      "id": 7
+    },
+    {
+      "work": "JavaScript",
+      "study_time": "03:00",
+      "description": "JS 공부",
+      "name": "모모",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/authex-e23c2.appspot.com/o/images%2Fbeach_ball.png?alt=media&token=06c06869-6266-45b8-8940-67d62238a87e",
+      "day": "2022. 8. 19",
+      "email": "mama@dev.com",
+      "id": 8
     }
   ]
 }

@@ -215,6 +215,11 @@ const List = styled.div`
   padding: 1em;
   margin-bottom: 1em;
 
+  @media screen and (max-width: 600px){
+    text-overflow: ellipsis;
+  
+  }
+
   h3 {
     font-size: 0.8em;
     font-weight: normal;
@@ -257,6 +262,11 @@ const Title = styled.div`
   }
 
   .tooltip .tooltiptextTop {
+    @media screen and (max-width: 600px){
+    width:8em;
+    height:1.7em;
+  
+  }
     visibility: hidden;
     width: 5em;
     height: 1.3em;
@@ -296,6 +306,10 @@ const Name = styled.div`
   width: 5.2em;
   text-align: center;
   margin: 0;
+  @media screen and (max-width: 600px){
+    display: none;
+  }
+
 `;
 
 const SubTitle = styled.div`
@@ -320,6 +334,12 @@ const Ranks = styled.div`
   padding: 2em;
   margin: 1em;
   border-radius: 10%;
+
+  @media screen and (max-width: 600px){
+    width:15em;
+    height: 17em;  
+    box-shadow: 1px 1px 3px 1px gray;
+  }
 
   h3 {
     margin-top: 0;
